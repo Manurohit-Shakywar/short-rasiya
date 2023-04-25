@@ -1,0 +1,238 @@
+
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  userId         String         @id @default(uuid())
+  email          String         @unique
+  userName       String         @unique
+  password       String         @db.Text
+  isNotification Boolean        @default(true)
+  deviceToken    String         @db.Text
+  deviceType     DEVICE_TYPE
+  loginType      LOGIN_TYPE
+  role           ROLES          @default(value: USER)
+  socialId       String?
+  isActive       Boolean        @default(true)
+  isVerify       Boolean        @default(false)
+  profile        Profile?
+  // session        Session?
+  videos         Videos[]
+  comments       Comments[]
+  verification   Verification[]
+  report         Report[]
+  followers      Followers[]
+  like           Likes[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime?      @updatedAt
+
+  @@fulltext([userName, email])
+}
+
+model Profile {
+  id         String    @id @default(uuid())
+  fullName   String
+  mobile     String?
+  profileImg String?   @db.Text
+  dob        String?
+  bio        String?   @db.Text
+  address    String?   @db.Text
+  user       Users?    @relation(fields: [userId], references: [userId])
+  userId     String?   @unique
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@fulltext([fullName])
+}
+
+model Followers {
+  id             String    @id @default(uuid())
+  user           Users     @relation(fields: [userId], references: [userId])
+  userId         String
+  isFollow       Boolean   @default(false)
+  followerUserId String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+}
+
+model MusicCategory {
+  id        String    @id @default(uuid())
+  name      String
+  userId    String
+  thumbnail String?   @db.Text
+  music     Music[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Music {
+  id              String        @id @default(uuid())
+  name            String
+  path            String        @db.Text
+  thumbnail       String?
+  artiestName     String
+  musicCategory   MusicCategory @relation(fields: [musicCategoryId], references: [id])
+  musicCategoryId String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?     @updatedAt
+}
+
+model HasTag {
+  id        String    @id @default(uuid())
+  name      String
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Videos {
+  id            String     @id @default(uuid())
+  title         String
+  description   String?    @db.Text
+  path          String     @db.Text
+  thumbnail     String?    @db.Text
+  artiestName   String?
+  isCommentShow Boolean    @default(true)
+  isPublic      Boolean    @default(true)
+  isDuet        Boolean    @default(false)
+  isLikeShow    Boolean    @default(true)
+  isDownload    Boolean    @default(true)
+  isActive      Boolean    @default(true)
+  user          Users      @relation(fields: [userId], references: [userId])
+  userId        String
+  hashtag       String?
+  views         Views[]
+  likes         Likes[]
+  comments      Comments[]
+  report        Report[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime?  @updatedAt
+
+  @@fulltext([title])
+}
+
+model Views {
+  id        String    @id @default(uuid())
+  userId    String
+  videos    Videos    @relation(fields: [videoId], references: [id])
+  videoId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Likes {
+  id        String    @id @default(uuid())
+  user      Users     @relation(fields: [userId], references: [userId])
+  userId    String
+  isLike    Boolean
+  videos    Videos    @relation(fields: [videoId], references: [id])
+  videoId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Comments {
+  id        String    @id @default(uuid())
+  comment   String    @db.Text
+  user      Users     @relation(fields: [userId], references: [userId])
+  userId    String
+  videos    Videos    @relation(fields: [videoId], references: [id])
+  videoId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Verification {
+  id           String        @id @default(uuid())
+  user         Users         @relation(fields: [userId], references: [userId])
+  userId       String
+  idNumber     String
+  documentType DOCUMENT_TYPE
+  path         String        @db.Text
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime?     @updatedAt
+}
+
+model Report {
+  id          String    @id @default(uuid())
+  user        Users     @relation(fields: [userId], references: [userId])
+  userId      String
+  videos      Videos    @relation(fields: [videoId], references: [id])
+  videoId     String
+  reason      String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+
+model ContactUs {
+  id        String    @id @default(uuid())
+  name      String
+  email     String
+  mobile    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Advertiesment {
+  id        String    @id @default(uuid())
+  brandName String?
+  link      String?   @db.Text
+  thumbnail String?   @db.Text
+  video     String?
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   @db.Text
+  expiresAt DateTime
+}
+
+// All enum define below here.........
+
+enum LOGIN_TYPE {
+  GOOGLE
+  FACEBOOK
+  WHATSAPP
+  APPLE
+  MANUAL
+}
+
+enum DEVICE_TYPE {
+  ANDROID
+  IOS
+}
+
+enum ROLES {
+  USER
+  ADMIN
+}
+
+enum PLAY_LIST_TYPE {
+  ADS
+  BANNER
+  COLLECTION
+  LIST
+}
+
+enum DOCUMENT_TYPE {
+  AADHARCARD
+  PANCARD
+  DRIVELICENSE
+  VOTERID
+}
