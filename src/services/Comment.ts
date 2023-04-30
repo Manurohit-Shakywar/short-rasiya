@@ -6,7 +6,22 @@ const prisma = new PrismaClient()
 
 const getComment = (req: any, res: Response) => {
 
-    prisma.comments.findMany({ where: { videoId: req?.query?.id } }).then(result => {
+    prisma.comments.findMany({
+        where: { videoId: req?.query?.id }, include: {
+            user: {
+                select: {
+                    userName: true,
+                    profile: {
+                        select: {
+                            profileImg: true
+                        }
+                    }
+                }
+            }
+        }
+    }).then(result => {
+
+        console.log(result)
         res.json({
             status: true,
             message: "Successfully fetch...",

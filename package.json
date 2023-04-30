@@ -26,12 +26,13 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^6.9.5",
-    "@prisma/client": "4.13.0",
+    "@prisma/client": "^4.13.0",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.36.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
+    "firebase-admin": "^11.7.0",
     "jsonwebtoken": "^9.0.0",
     "module-alias": "^2.2.2"
   }

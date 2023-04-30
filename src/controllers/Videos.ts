@@ -26,6 +26,13 @@ const postVideo = (req: Request, res: Response) => {
 }
 const getVideos = (req: Request, res: Response) => {
 
+    if (Utils.isEmpty(req.body.page)) {
+
+        return res.json({
+            status: false,
+            message: 'Require page...'
+        })
+    }
     Videos.getVideos(req, res);
 
 }

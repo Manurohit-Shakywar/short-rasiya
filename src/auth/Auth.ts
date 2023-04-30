@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
-const prisma = new PrismaClient()
 
 const generateAccessToken = (user: any) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "365d" })
@@ -17,7 +15,7 @@ const generateRefreshToken = (user: any) => {
 
 
 const isAuthenticated = (req: any, res: any, next: any) => {
-    const token = req.headers["authorization"];
+    const token = req.headers["authorization"]?.replace("Bearer ", '');
 
     if (!token) {
         return res.json({
@@ -27,6 +25,7 @@ const isAuthenticated = (req: any, res: any, next: any) => {
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err: any, user: any) => {
+        console.log("")
         if (err) {
             res.json({
                 status: false,

@@ -1,4 +1,4 @@
-import { DEVICE_TYPE, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import auth from '@auth';
@@ -55,7 +55,7 @@ const socialLogin = (req: any, res: Response) => {
             userData: result
         })
 
-    }).catch(err => {
+    }).catch((err: any) => {
         res.json({ success: false, message: Utils.onError(err) })
     })
 
@@ -191,7 +191,7 @@ const register = async (req: any, res: Response) => {
                 userData: user
             }
         )
-    }).catch(err => {
+    }).catch((err: any) => {
         res.json({ success: false, message: Utils.onError(err) })
     })
 
@@ -249,7 +249,7 @@ const updateProfile = (req: any, res: Response) => {
             userData: result
         })
 
-    }).catch(err => {
+    }).catch((err: any) => {
         res.json({ success: false, message: Utils.onError(err) })
     })
 
@@ -357,18 +357,20 @@ const getUsers = (req: Request, res: Response) => {
             profile: true
         }
 
-    }).then(result => res.json({
+    }).then((result: any) => res.json({
         status: true,
         message: 'Users List..',
         userData: result
-    })).catch(err => {
+    })).catch((err: any) => {
         res.json({ success: false, message: Utils.onError(err) })
     })
 }
 
 const getProfile = async (req: any, res: Response) => {
 
-    const userId = req?.query?.userId?.length > 0 ? req?.query?.userId : req.user?.userId
+    const userId = req?.body?.userId?.length > 0 ? req?.body?.userId : req.user?.userId
+    const num = parseInt(req.body.page) - 1
+    const skip = Utils.PAGE_NUMBER * num;
     const result: any = await prisma.users.findUnique({
         where: { userId: userId },
         select: {
@@ -380,7 +382,10 @@ const getProfile = async (req: any, res: Response) => {
                     profileImg: true,
                 },
             },
-            videos: true,
+            videos: {
+                skip:skip,
+                take:Utils.PAGE_NUMBER,
+            },
             like: {
                 where: { isLike: true },
                 include: {

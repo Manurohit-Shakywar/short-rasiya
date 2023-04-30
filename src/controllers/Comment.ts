@@ -20,10 +20,10 @@ const getComment = (req: Request, res: Response) => {
 
 const addComment = (req: Request, res: Response) => {
 
-    if (Utils.isEmpty(req.body?.videosId)) {
+    if (Utils.isEmpty(req.body?.videoId)) {
         res.json({
             status: false,
-            message: "Require videosId..."
+            message: "Require videoId..."
         })
 
     } else if (Utils.isEmpty(req.body?.comment)) {

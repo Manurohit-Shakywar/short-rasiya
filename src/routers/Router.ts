@@ -4,6 +4,9 @@ import { Router } from "express";
 import Search from "@controllers/Search";
 import Like from "@controllers/Like";
 import Videos from "@controllers/Videos";
+import Comment from "@controllers/Comment";
+import Advertiestment from "@controllers/Advertiestment";
+import Followers from "@controllers/Followers";
 
 const routes = Router();
 
@@ -13,15 +16,23 @@ const routes = Router();
 routes.post('/login', Users.login)
 routes.post('/register', Users.register)
 routes.post('/socialLogin', Users.socialLogin)
-routes.post('/checkUser', Users.socialLogin)
-routes.post('/updateProfile', Users.socialLogin)
-routes.post('/search', Search.search)
-routes.post('/postVideo', Videos.postVideo)
-routes.post('/setLike', Like.addLike)
-
+routes.post('/checkUserName', Users.checkUserName)
+routes.post('/updateProfile', Auth.isAuthenticated, Users.updateProfile)
+routes.post('/search', Auth.isAuthenticated, Search.search)
+routes.post('/postVideo', Auth.isAuthenticated, Videos.postVideo)
+routes.post('/addLIke', Auth.isAuthenticated, Like.addLike)
+routes.post('/addComment', Auth.isAuthenticated, Comment.addComment)
+routes.post('/addComment', Auth.isAuthenticated, Comment.addComment)
+routes.post('/addAdvertiesment', Auth.isAuthenticated, Advertiestment.addAdvertiesment)
+routes.post('/deleteAdvertiesment', Auth.isAuthenticated, Advertiestment.deleteAdvertiesment)
+routes.post('/addFollower', Auth.isAuthenticated, Followers.addFollower)
+routes.post('/getFollower', Auth.isAuthenticated, Followers.getFollowers)
+routes.post('/getVideos', Auth.isAuthenticated, Videos.getVideos)
+routes.post('/getProfile', Auth.isAuthenticated, Users.getProfile)
 
 // Get Router..............
-// routes.get('/getVideos', Auth.isAuthenticated, Like.getVideos)
+routes.get('/getComment', Auth.isAuthenticated, Comment.getComment)
+routes.get('/getAdvertiesment', Auth.isAuthenticated, Advertiestment.getAdvertiesment)
 
 
 

@@ -105,6 +105,7 @@ const login = (req: Request, res: Response) => {
 
 const getUsers = (req: Request, res: Response) => {
 
+    Users.getUsers(req, res)
 }
 
 const updateProfile = (req: Request, res: Response) => {
@@ -112,11 +113,19 @@ const updateProfile = (req: Request, res: Response) => {
 }
 const socialLogin = (req: Request, res: Response) => {
 
+    Users.socialLogin(req, res)
 }
 const getSession = (req: Request, res: Response) => {
+    Users.getSession(req, res)
 
 }
 const getProfile = (req: Request, res: Response) => {
+    if (Utils.isEmpty(req.body.page)) {
+        return res.json({
+            status: false,
+            message: "Require page...",
+        })
+    }
     Users.getProfile(req, res);
 }
 const checkUserName = (req: Request, res: Response) => {

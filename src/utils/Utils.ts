@@ -5,6 +5,11 @@ const prisma = new PrismaClient()
 
 class Utils {
 
+    static PAGE_NUMBER = 2;
+    static VIDEO_PAGE = 2;
+    static PROFILE_VIDEO_PAGE = 2;
+    static FOLLOWER_PAGE = 2;
+    static NOTIFICATION_PAGE = 2;
 
     static isEmail = (email: string) => {
         let regexEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -50,7 +55,7 @@ class Utils {
     }
 
     static onError(err: any) {
-        console.log(err);
+        // console.log(err);
         const error = JSON.parse(JSON.stringify(err))
         console.log(error);
         if (error?.meta?.target === 'Users_email_key') {
