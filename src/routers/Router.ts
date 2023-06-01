@@ -33,6 +33,7 @@ routes.post('/getProfile', Auth.isAuthenticated, Users.getProfile)
 // Get Router..............
 routes.get('/getComment', Auth.isAuthenticated, Comment.getComment)
 routes.get('/getAdvertiesment', Auth.isAuthenticated, Advertiestment.getAdvertiesment)
+routes.get('/getSession', Auth.isAuthenticated, Users.getSession)
 
 
 

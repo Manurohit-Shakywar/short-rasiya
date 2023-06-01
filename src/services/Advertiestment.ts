@@ -5,8 +5,8 @@ const prisma = new PrismaClient()
 
 
 const addAdvertiesment = (req: Request, res: Response) => {
-
-    prisma.advertiesment.create({ data: req.body }).then(result => {
+    console.log(req.body);
+    prisma.advertiesment.create({ data: req?.body }).then(result => {
         res.json({
             status: true,
             message: "Successfully save...",

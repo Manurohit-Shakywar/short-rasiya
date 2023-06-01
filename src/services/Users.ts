@@ -43,8 +43,6 @@ const socialLogin = (req: any, res: Response) => {
 
         const accessToken = auth.generateAccessToken(result)
         const refreshToken = auth.generateRefreshToken(result)
-        result.accessToken = accessToken
-        result.refreshToken = refreshToken
         delete result.password
         // req.session.user = result
         delete result.userId
@@ -52,7 +50,9 @@ const socialLogin = (req: any, res: Response) => {
             status: true,
             isNewUser: false,
             message: 'Login Successfully...',
-            userData: result
+            userData: result,
+            accessToken,
+            refreshToken
         })
 
     }).catch((err: any) => {
@@ -99,8 +99,7 @@ const login = async (req: any, res: Response) => {
         );
         const accessToken = auth.generateAccessToken(result)
         const refreshToken = auth.generateRefreshToken(result)
-        result.accessToken = accessToken
-        result.refreshToken = refreshToken
+
         // req.session.user = result
         delete result.password
         delete result.userId
@@ -108,7 +107,9 @@ const login = async (req: any, res: Response) => {
             {
                 status: true,
                 message: 'Login Successfully...',
-                userData: result
+                userData: result,
+                accessToken,
+                refreshToken
             }
         )
 
@@ -179,8 +180,6 @@ const register = async (req: any, res: Response) => {
     }).then((user: any) => {
         const accessToken = auth.generateAccessToken(user)
         const refreshToken = auth.generateRefreshToken(user)
-        user.accessToken = accessToken
-        user.refreshToken = refreshToken
         delete user.password
         // req.session.user = user
         delete user.userId
@@ -188,7 +187,9 @@ const register = async (req: any, res: Response) => {
             {
                 status: true,
                 message: 'Register Successfully...',
-                userData: user
+                userData: user,
+                accessToken,
+                refreshToken
             }
         )
     }).catch((err: any) => {
@@ -199,7 +200,7 @@ const register = async (req: any, res: Response) => {
 
 
 const updateProfile = (req: any, res: Response) => {
-    const { deviceToken, deviceType, fullName, dob, profileImg, mobile } = req.body
+    const { deviceToken, deviceType, fullName, dob, profileImg, mobile, userName } = req.body
 
     prisma.users.update({
         where: {
@@ -208,30 +209,33 @@ const updateProfile = (req: any, res: Response) => {
         data: {
             deviceToken: deviceToken,
             deviceType: deviceType,
-
+            userName: userName,
             profile: {
                 update: {
                     fullName: fullName,
                     dob: dob,
                     profileImg: profileImg,
-                    mobile: mobile
+                    mobile: mobile,
 
                 }
             },
 
         },
         select: {
-            userId: true,
+            password: false,
+            userName: true,
             email: true,
-            isActive: true,
             isNotification: true,
+            isActive: true,
+            isVerify: true,
             profile: {
                 select: {
                     fullName: true,
-                    dob: true,
                     mobile: true,
                     profileImg: true,
-
+                    dob: true,
+                    bio: true,
+                    address: true,
                 }
             }
         }
@@ -259,11 +263,41 @@ const updateProfile = (req: any, res: Response) => {
 
 const getSession = (req: any, res: Response) => {
 
-    res.json({
-        status: true,
-        message: 'Session Successfully fetch...',
-        data: req.user
+    prisma.users.findUnique({
+        where: { userId: req?.user?.userId },
+
+        select: {
+            password: false,
+            userName: true,
+            email: true,
+            isNotification: true,
+            isActive: true,
+            isVerify: true,
+            profile: {
+                select: {
+                    fullName: true,
+                    mobile: true,
+                    profileImg: true,
+                    dob: true,
+                    bio: true,
+                    address: true,
+                }
+            }
+        }
+    }).then(result => {
+        res.json({
+            status: true,
+            message: 'Session Successfully fetch...',
+            userData: result
+        })
+    }).catch(err => {
+        res.json({
+            status: false,
+            message: Utils.onError(err),
+        })
     })
+
+
 
 }
 
@@ -311,8 +345,6 @@ const adminLogin = async (req: any, res: Response) => {
     } else {
         const accessToken = auth.generateAccessToken(user)
         const refreshToken = auth.generateRefreshToken(user)
-        user.accessToken = accessToken
-        user.refreshToken = refreshToken
         delete user.password
         // req.session.user = user
         delete user.userId
@@ -320,7 +352,9 @@ const adminLogin = async (req: any, res: Response) => {
             {
                 status: true,
                 message: 'Login Successfully...',
-                userData: user
+                userData: user,
+                accessToken,
+                refreshToken
             }
         )
     }
@@ -374,7 +408,12 @@ const getProfile = async (req: any, res: Response) => {
     const result: any = await prisma.users.findUnique({
         where: { userId: userId },
         select: {
-            _count: true,
+            _count: {
+                select: {
+                    videos: true,
+                    like: true,
+                }
+            },
             userName: true,
             profile: {
                 select: {
@@ -383,8 +422,8 @@ const getProfile = async (req: any, res: Response) => {
                 },
             },
             videos: {
-                skip:skip,
-                take:Utils.PAGE_NUMBER,
+                skip: skip,
+                take: Utils.PAGE_NUMBER,
             },
             like: {
                 where: { isLike: true },
@@ -397,11 +436,15 @@ const getProfile = async (req: any, res: Response) => {
     })
 
 
+    const followers = await prisma.followers.count({
+        where: { followerUserId: userId, AND: { isFollow: true } }
+    })
     const following = await prisma.followers.count({
-        where: { followerUserId: req?.user?.userId ?? '' }
+        where: { followerUserId: userId, AND: { isFollowing: true } }
     })
 
 
+    result._count.followers = followers
     result._count.following = following
     res.json({
         status: true,

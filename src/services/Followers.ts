@@ -4,21 +4,35 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient()
 
-const getFollowers = (req: Request, res: Response) => {
-    const { userId, followerUserId } = req.body;
-
+const getFollowers = (req: any, res: Response) => {
+    const userId = req?.body?.userId?.length > 0 ? req?.body?.userId : req.user?.userId
+    const isFollow = req.body.isFollow === 'true'
     prisma.followers.findMany({
-        where: { userId: userId },
+
+        where: { followerUserId: userId, AND: [{
+            isFollow: isFollow,
+            isFollowing: !isFollow
+        }] },
         select: {
+
             id: true,
             followerUserId: true,
             createdAt: true,
             updatedAt: true,
+            isFollow: true,
             user: {
                 select: {
                     userName: true,
                     email: true,
+                    userId: true,
+                    profile: {
+                        select: {
+                            fullName: true,
+                            profileImg: true
+                        }
+                    }
                 }
+
             },
 
         },
@@ -39,23 +53,24 @@ const addFollower = (req: any, res: Response) => {
 
     prisma.followers.findMany({
         where: {
-            userId: req.user.userId
+            userId: req.body.userId
         }
     }).then(data => {
         if (data?.length === 0) {
             prisma.followers.create({
                 data: {
-                    followerUserId: req.body.followerUserId,
-                    userId: req.user.userId,
+                    followerUserId: req.user.userId,
+                    userId: req.body.userId,
                     isFollow: req.body.isFollow === 'true'
                 }
             }).then(result => {
                 res.json({
                     status: true,
-                    message: 'Successfully save...',
+                    message: 'Successfully Follow...',
                     result
                 })
             }).catch((err: any) => {
+
                 res.json({ status: false, message: Utils.onError(err) })
             })
         } else {

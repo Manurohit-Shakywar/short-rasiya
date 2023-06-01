@@ -2,8 +2,65 @@ import path from "path";
 import fs from 'fs'
 
 import { v2 as cloudinary } from 'cloudinary'
+import { Storage } from "@google-cloud/storage";
+
+const storage = new Storage({
+    keyFilename: '/path/to/service-account-key.json', // Path to service account key file
+});
+// Creates a reference to the bucket
+const bucket = storage.bucket('bucketName');
+// Uploads a local file to the bucket
+
+// Uploads a file to the bucket
+async function uploadFileToBucket(bucketName: any, file: any) {
+    // Gets the name of the file
+    // const fileName = `${uuidv4()}-${file.name}`;
+    const fileName = file.name;
+
+    // Creates a reference to the bucket
+    const bucket = storage.bucket(bucketName);
+
+    // Creates a write stream to the file in the bucket
+    const fileStream = bucket.file(fileName).createWriteStream({
+        metadata: {
+            contentType: file.mimetype,
+        },
+    });
+
+    // Pipes the file data to the write stream
+    fileStream.end(file.data);
+
+    console.log(`${fileName} uploaded to ${bucketName}.`);
+
+    return fileName;
+}
+
+
+
+
 
 const FileUtils = {
+
+
+
+    async uploadFile(req: any, res: any) {
+
+        try {
+            // Checks if file was uploaded
+            if (!req.files || Object.keys(req.files).length === 0) {
+                return res.status(400).send('No files were uploaded.');
+            }
+
+            // Uploads the file to the bucket
+            const fileName = await uploadFileToBucket('my-bucket', req.files.file);
+
+            res.send(`File uploaded to Google Cloud Storage as ${fileName}`);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('An error occurred while uploading the file to Google Cloud Storage.');
+        }
+
+    },
 
 
     async addFile(file: any, folderName: any, resource_type?: "image" | "video" | "raw" | "auto") {
@@ -31,6 +88,22 @@ const FileUtils = {
                 resource_type: resource_type,
                 public_id: folderName + file.name
             };
+
+
+
+            // try {
+            //     const fileName = await uploadFileToBucket('my-bucket', file);
+            //     await this.removeFile(file)
+            //     // res.send(`File uploaded to Google Cloud Storage as ${fileName}`);
+            //     return fileName;
+
+            //   } catch (err) {
+            //     console.error(err);
+            //     // res.status(500).send('An error occurred while uploading the file to Google Cloud Storage.');
+            //   }
+
+
+
 
             try {
 

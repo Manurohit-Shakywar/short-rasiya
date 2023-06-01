@@ -109,7 +109,7 @@ const getUsers = (req: Request, res: Response) => {
 }
 
 const updateProfile = (req: Request, res: Response) => {
-
+    Users.updateProfile(req, res)
 }
 const socialLogin = (req: Request, res: Response) => {
 

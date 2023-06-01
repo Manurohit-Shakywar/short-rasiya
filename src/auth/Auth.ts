@@ -20,6 +20,7 @@ const isAuthenticated = (req: any, res: any, next: any) => {
     if (!token) {
         return res.json({
             status: false,
+            isExpire:true,
             message: 'A token is required for authentication'
         });
     }
@@ -29,6 +30,7 @@ const isAuthenticated = (req: any, res: any, next: any) => {
         if (err) {
             res.json({
                 status: false,
+                isExpire:true,
                 message: 'Invalid token!'
             })
         }
@@ -38,23 +40,6 @@ const isAuthenticated = (req: any, res: any, next: any) => {
         }
     }) //end of jwt.verify()
 } //end of function
-// try {
-//     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
-//     req.user = decoded;
-// } catch (err) {
-//     return res.status(200).send("Invalid Token");
-// }
-// return next();
-// };
-
-// const isAuthenticated = (req: any, res: any, next: any) => {
-
-//     console.log('Cookies:',JSON.stringify(req.headers.cookie));
-//     // console.log('UserDetails:',req);
-
-//     if (req.session.user) next()
-//     else res.json({ status: false, isExpire: true, message: 'You are not a valid user' })
-// }
 
 
 export default { isAuthenticated, generateAccessToken, generateRefreshToken };

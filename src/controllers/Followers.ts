@@ -3,12 +3,12 @@ import Utils from "@utils";
 import { Request, Response } from "express";
 
 const addFollower = (req: Request, res: Response) => {
-    const { followerUserId, isFollow } = req.body;
-    if (Utils.isEmpty(followerUserId)) {
+    const { userId, isFollow } = req.body;
+    if (Utils.isEmpty(userId)) {
 
         res.json({
             status: false,
-            message: "Require followerUserId..."
+            message: "Require userId..."
         })
 
     } else if (Utils.isEmpty(isFollow)) {
@@ -26,6 +26,12 @@ const addFollower = (req: Request, res: Response) => {
 
 const getFollowers = (req: Request, res: Response) => {
 
+    if (Utils.isEmpty(req.body?.isFollow)) {
+        return res.json({
+            status: false,
+            message: 'Require isFollow...'
+        })
+    }
     Followers.getFollowers(req, res)
 }
 

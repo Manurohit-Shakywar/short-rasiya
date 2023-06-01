@@ -5,12 +5,7 @@ import { Request, Response } from "express"
 
 const addAdvertiesment = (req: any, res: Response) => {
     const { brandName, link } = req.body;
-    if (!req.files.thumbnail) {
-        res.json({
-            status: false,
-            message: "Require thumbnail...",
-        })
-    } else if (Utils.isEmpty(link)) {
+     if (Utils.isEmpty(link)) {
         res.json({
             status: false,
             message: "Require link...",
