@@ -1,14 +1,14 @@
 import path from "path";
 import fs from 'fs'
 
-import { v2 as cloudinary } from 'cloudinary'
 import { Storage } from "@google-cloud/storage";
+import { bucketName, keyFilename } from "constants/constant";
 
 const storage = new Storage({
-    keyFilename: '/path/to/service-account-key.json', // Path to service account key file
+    keyFilename: keyFilename, // Path to service account key file
 });
 // Creates a reference to the bucket
-const bucket = storage.bucket('bucketName');
+const bucket = storage.bucket(bucketName);
 // Uploads a local file to the bucket
 
 // Uploads a file to the bucket
@@ -52,7 +52,7 @@ const FileUtils = {
             }
 
             // Uploads the file to the bucket
-            const fileName = await uploadFileToBucket('my-bucket', req.files.file);
+            const fileName = await uploadFileToBucket(bucketName, req.files.file);
 
             res.send(`File uploaded to Google Cloud Storage as ${fileName}`);
         } catch (err) {
@@ -64,17 +64,14 @@ const FileUtils = {
 
 
     async addFile(file: any, folderName: any, resource_type?: "image" | "video" | "raw" | "auto") {
-
+        
         console.log('File:', file);
 
         if (!file) {
             return null
         }
-
         console.log('Test', process.env.DEVELOPMENT);
-
         if (process.env.DEVELOPMENT) {
-
             const newPath = path.join(process.cwd(), 'uploads', file.name)
             const result = await file.mv(newPath)
             console.log(result)
@@ -88,39 +85,7 @@ const FileUtils = {
                 resource_type: resource_type,
                 public_id: folderName + file.name
             };
-
-
-
-            // try {
-            //     const fileName = await uploadFileToBucket('my-bucket', file);
-            //     await this.removeFile(file)
-            //     // res.send(`File uploaded to Google Cloud Storage as ${fileName}`);
-            //     return fileName;
-
-            //   } catch (err) {
-            //     console.error(err);
-            //     // res.status(500).send('An error occurred while uploading the file to Google Cloud Storage.');
-            //   }
-
-
-
-
-            try {
-
-                // Upload the image
-                const result = await cloudinary.uploader.upload(file.tempFilePath, options);
-                await this.removeFile(file)
-                return result.url;
-            } catch (error) {
-                await this.removeFile(file)
-            }
         }
-
-
-
-
-
-
     },
 
     async removeFile(file: any) {

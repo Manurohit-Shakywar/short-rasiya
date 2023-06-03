@@ -3,7 +3,6 @@ import 'module-alias/register';
 import fileUpload from "express-fileupload";
 import cors from 'cors';
 import path from 'path';
-import { v2 as cloudinary } from "cloudinary";
 import routes from '@router';
 
 const app = express();
@@ -38,13 +37,6 @@ if (process.env.DEVELOPMENT) {
   }))
 }
 
-cloudinary.config({
-  cloud_name: 'dnh7u1gap',
-  api_key: '511525578253627',
-  api_secret: 'WM9i0cMVjfsUaD03HCmslAVjvI0',
-  secure: true
-});
-// console.log(cloudinary.config());
 
 app.use(express.static('uploads'));
 // app.use('/uploads', express.static("/uploads"));
