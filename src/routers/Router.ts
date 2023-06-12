@@ -7,6 +7,7 @@ import Videos from "@controllers/Videos";
 import Comment from "@controllers/Comment";
 import Advertiestment from "@controllers/Advertiestment";
 import Followers from "@controllers/Followers";
+import FileUtils from "@fileUtils";
 
 const routes = Router();
 
@@ -38,13 +39,13 @@ routes.get('/getSession', Auth.isAuthenticated, Users.getSession)
 
 
 
-// routes.post('/upload', async (req: any, res: any) => {
-//     // console.log("Req:",req.files.myFile);
+routes.post('/upload', async (req: any, res: any) => {
+    // console.log("Req:",req.files.myFile);
 
-//     const file = await FileUtils.addFile(req.files?.myFile, 'Test/');
-//     // console.log('file:',file);
-//     res.json(file)
-// })
+    const file = await FileUtils.uploadFile(req,res);
+    console.log('file:',file);
+    res.json(file)
+})
 
 
 

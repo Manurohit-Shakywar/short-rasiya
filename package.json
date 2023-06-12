@@ -4,8 +4,10 @@
   "description": "",
   "main": "./src/Server.ts",
   "scripts": {
-    "start": "nodemon",
+    "shivkumarscript": "ts-node -T -P server/tsconfig.json server/index.ts",
+    "start": "",
     "dev": "nodemon",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

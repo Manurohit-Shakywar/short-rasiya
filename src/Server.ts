@@ -2,7 +2,6 @@ import express from 'express';
 import 'module-alias/register';
 import fileUpload from "express-fileupload";
 import cors from 'cors';
-import path from 'path';
 import routes from '@router';
 
 const app = express();

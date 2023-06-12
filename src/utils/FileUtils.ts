@@ -1,8 +1,9 @@
 import path from "path";
 import fs from 'fs'
 
-import { Storage } from "@google-cloud/storage";
-import { bucketName, keyFilename } from "constants/constant";
+import {Storage} from "@google-cloud/storage";
+import {bucketName, keyFilename} from "constants/constant";
+import * as process from "process";
 
 const storage = new Storage({
     keyFilename: keyFilename, // Path to service account key file
@@ -24,6 +25,7 @@ async function uploadFileToBucket(bucketName: any, file: any) {
     const fileStream = bucket.file(fileName).createWriteStream({
         metadata: {
             contentType: file.mimetype,
+
         },
     });
 
@@ -32,15 +34,11 @@ async function uploadFileToBucket(bucketName: any, file: any) {
 
     console.log(`${fileName} uploaded to ${bucketName}.`);
 
-    return fileName;
+    return `${process.env.ImageBaseUrl + fileName}`;
 }
 
 
-
-
-
 const FileUtils = {
-
 
 
     async uploadFile(req: any, res: any) {
@@ -50,21 +48,20 @@ const FileUtils = {
             if (!req.files || Object.keys(req.files).length === 0) {
                 return res.status(400).send('No files were uploaded.');
             }
-
             // Uploads the file to the bucket
             const fileName = await uploadFileToBucket(bucketName, req.files.file);
 
-            res.send(`File uploaded to Google Cloud Storage as ${fileName}`);
+            res.json(`File uploaded to Google Cloud Storage as ${fileName}`);
         } catch (err) {
             console.error(err);
-            res.status(500).send('An error occurred while uploading the file to Google Cloud Storage.');
+            res.status(500).json('An error occurred while uploading the file to Google Cloud Storage.');
         }
 
     },
 
 
     async addFile(file: any, folderName: any, resource_type?: "image" | "video" | "raw" | "auto") {
-        
+
         console.log('File:', file);
 
         if (!file) {
