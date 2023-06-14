@@ -2,12 +2,11 @@
   "name": "short-rasiya",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/Server.ts",
+  "main": "Server.ts",
   "scripts": {
-    "shivkumarscript": "ts-node -T -P server/tsconfig.json server/index.ts",
-    "start": "",
-    "dev": "nodemon",
-    "build": "tsc",
+    "build": "npx tsc",
+    "start": "node dist/Server.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/Server.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

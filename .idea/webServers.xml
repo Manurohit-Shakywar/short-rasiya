@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="37204c10-9e20-4421-910c-ab5bd31243d3" name="34.93.86.239">
-        <fileTransfer accessType="SFTP" host="34.93.86.239" port="22" sshConfigId="bcbdde6b-5b55-4cb7-aa7c-dcec176bb398" sshConfig="short-rasiya@34.93.86.239:22 key" keyPair="true">
+      <webServer id="bdef4d4d-7420-4ae8-9901-79f95d131496" name="short-rasiya-dev">
+        <fileTransfer accessType="SFTP" host="34.93.86.239" port="22" sshConfigId="f35fcaf0-416b-4b6a-b09a-f58eb3f75f48" sshConfig="short-rasiya@34.93.86.239:22 key" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

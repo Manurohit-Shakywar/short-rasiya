@@ -2,7 +2,7 @@
 <project version="4">
   <component name="SshConfigs">
     <configs>
-      <sshConfig host="34.93.86.239" id="bcbdde6b-5b55-4cb7-aa7c-dcec176bb398" keyPath="$USER_HOME$/.ssh/short-rasiya" port="22" nameFormat="DESCRIPTIVE" username="short-rasiya" useOpenSSHConfig="true" />
+      <sshConfig host="34.93.86.239" id="f35fcaf0-416b-4b6a-b09a-f58eb3f75f48" keyPath="$USER_HOME$/.ssh/short-rasiya" port="22" nameFormat="DESCRIPTIVE" username="short-rasiya" useOpenSSHConfig="true" />
     </configs>
   </component>
 </project>

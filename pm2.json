@@ -1,0 +1,23 @@
+{
+  "apps": [
+    {
+      "name": "app",
+      "ignore": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        ".git",
+        "node_modules"
+      ],
+      "watch": [
+        "src"
+      ],
+      "script": "Server.ts",
+      "node_args": "node -r tsconfig-paths/register -r ts-node/register Server.ts",
+      "ext": "ts, js",
+
+      "env": {
+        "TS_NODE_BASEURL": "./dist"
+      }
+    }
+  ]
+}
