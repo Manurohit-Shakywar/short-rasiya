@@ -1,4 +1,4 @@
-import Utils from "@utils";
+import Utils from "../utils/Utils";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 const prisma = new PrismaClient()

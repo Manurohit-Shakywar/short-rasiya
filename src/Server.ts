@@ -1,8 +1,8 @@
+// import 'module-alias/register';
 import express from 'express';
-import 'module-alias/register';
 import fileUpload from "express-fileupload";
 import cors from 'cors';
-import routes from '@router';
+import routes from './routers/Router';
 
 const app = express();
 const port = process.env.PORT || 4000

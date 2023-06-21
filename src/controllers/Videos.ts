@@ -1,5 +1,5 @@
-import Videos from "@services/Videos"
-import Utils from "@utils";
+import Videos from "../services/Videos"
+import Utils from "../utils/Utils";
 import { Request, Response } from "express"
 
 const postVideo = (req: Request, res: Response) => {

@@ -1,5 +1,6 @@
-import Advertiestment from "@services/Advertiestment";
-import Utils from "@utils";
+// import Advertiestment from "@services/Advertiestment";
+import Advertiestment from "../services/Advertiestment";
+import Utils from "../utils/Utils";
 import { Request, Response } from "express"
 
 

@@ -1,13 +1,13 @@
-import Users from "@controllers/Users";
-import Auth from "@auth";
+import Users from "../controllers/Users";
+import Auth from "../auth/Auth";
 import { Router } from "express";
-import Search from "@controllers/Search";
-import Like from "@controllers/Like";
-import Videos from "@controllers/Videos";
-import Comment from "@controllers/Comment";
-import Advertiestment from "@controllers/Advertiestment";
-import Followers from "@controllers/Followers";
-import FileUtils from "@fileUtils";
+import Search from "../controllers/Search";
+import Like from "../controllers/Like";
+import Videos from "../controllers/Videos";
+import Comment from "../controllers/Comment";
+import Advertiestment from "../controllers/Advertiestment";
+import Followers from "../controllers/Followers";
+import FileUtils from "../utils/FileUtils";
 
 const routes = Router();
 

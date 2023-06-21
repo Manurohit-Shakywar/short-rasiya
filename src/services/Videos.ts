@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client"
-import Utils from "@utils"
+import Utils from "../utils/Utils";
 import { Request, Response } from "express"
-import FileUtils from "utils/FileUtils"
+import FileUtils from "../utils/FileUtils"
 const prisma = new PrismaClient()
 
 const postVideo = async (req: any, res: Response) => {

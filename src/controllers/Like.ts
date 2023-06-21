@@ -1,5 +1,5 @@
-import Like from "@services/Like";
-import Utils from "@utils";
+import Like from "../services/Like";
+import Utils from "../utils/Utils";
 import { Request, Response } from "express"
 
 

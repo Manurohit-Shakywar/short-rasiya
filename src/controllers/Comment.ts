@@ -1,5 +1,5 @@
-import Comment from "@services/Comment";
-import Utils from "@utils";
+import Comment from "../services/Comment";
+import Utils from "../utils/Utils";
 import { Request, Response } from "express";
 
 

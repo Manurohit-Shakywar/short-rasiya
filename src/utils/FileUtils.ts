@@ -2,7 +2,7 @@ import path from "path";
 import fs from 'fs'
 
 import {Storage} from "@google-cloud/storage";
-import {bucketName, keyFilename} from "constants/constant";
+import {bucketName, keyFilename} from "../constants/constant";
 import * as process from "process";
 
 const storage = new Storage({

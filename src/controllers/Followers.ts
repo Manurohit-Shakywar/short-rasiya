@@ -1,5 +1,5 @@
-import Followers from "@services/Followers";
-import Utils from "@utils";
+import Followers from "../services/Followers";
+import Utils from "../utils/Utils";
 import { Request, Response } from "express";
 
 const addFollower = (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
-import Users from "@services/Users"
-import Utils from "@utils"
+import Users from "../services/Users"
+import Utils from "../utils/Utils";
 import { Request, Response } from "express"
 
 
